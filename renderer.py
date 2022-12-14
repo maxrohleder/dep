@@ -52,6 +52,7 @@ class AnalyticRenderer(nn.Module):
                 # source position in ellipsoid eigenbasis
                 Cn = sinv @ (C - mu)
 
+                # loop over images coordinates (might vectorize this)
                 for u in range(self.outshape[1]):
                     for v in range(self.outshape[2]):
 
@@ -70,10 +71,10 @@ class AnalyticRenderer(nn.Module):
 
                         # if discriminant is negative, ray and sphere don't intersect
                         if disc > 0:
+
+                            # Calculate intersection points and re-scale back to world sizes
                             tmax = (-_b + np.sqrt(disc)) / 2
                             tmin = (-_b - np.sqrt(disc)) / 2
-                            # Calculate intersection points and scale by radii
-
                             P0 = sigma @ (Cn + tmax * rn)
                             P1 = sigma @ (Cn + tmin * rn)
 
